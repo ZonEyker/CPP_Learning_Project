@@ -33,7 +33,7 @@ Il serait donc bon de savoir qui est censé détruire les avions du programme, a
 Répondez aux questions suivantes :
 1. Qui est responsable de détruire les avions du programme ? (si vous ne trouvez pas, faites/continuez la question 4 dans TASK_0)
 
--La fonction timer()
+- La fonction timer()
 2. Quelles autres structures contiennent une référence sur un avion au moment où il doit être détruit ?
 
 - La display_queue et la move_queue
