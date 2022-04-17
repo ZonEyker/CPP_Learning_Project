@@ -3,6 +3,7 @@
 #include "waypoint.hpp"
 
 #include <algorithm>
+#include <map>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -14,7 +15,8 @@ class Terminal;
 class Tower
 {
 private:
-    using AircraftToTerminal      = std::vector<std::pair<const Aircraft*, size_t>>;
+    // using AircraftToTerminal      = std::vector<std::pair<const Aircraft*, size_t>>;
+    using AircraftToTerminal      = std::map<const Aircraft*, size_t>;
     using AircraftAndTerminalIter = AircraftToTerminal::iterator;
 
     Airport& airport;
@@ -36,4 +38,8 @@ public:
     // produce instructions for aircraft
     WaypointQueue get_instructions(Aircraft& aircraft);
     void arrived_at_terminal(const Aircraft& aircraft);
+
+    WaypointQueue reserve_terminal(Aircraft& aircraft);
+
+    void delete_reserved_terminal(Aircraft& aircraft);
 };

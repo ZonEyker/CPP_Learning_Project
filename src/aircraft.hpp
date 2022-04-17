@@ -10,9 +10,11 @@
 #include <string>
 #include <string_view>
 
-class Aircraft : public GL::Displayable, public GL::DynamicObject
+class Aircraft : public GL::Displayable
 {
 private:
+    bool refuel = false;
+    int fuel    = (rand() % (3000 - 150)) + 150;
     const AircraftType& type;
     const std::string flight_number;
     Point3D pos, speed; // note: the speed should always be normalized to length 'speed'
@@ -57,11 +59,28 @@ public:
         speed.cap_length(max_speed());
     }
 
+    ~Aircraft()
+    {
+        if (has_terminal())
+        {
+            control.delete_reserved_terminal(*this);
+        }
+    }
     const std::string& get_flight_num() const { return flight_number; }
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
 
     void display() const override;
-    void move() override;
+    bool move();
+
+    bool has_terminal() const;
+    bool is_circling() const;
+
+    int getFuel();
+
+    bool has_refuel() const;
+    bool is_low_on_fuel() const;
+
+    void refill(int& fuel_stock);
 
     friend class Tower;
 };

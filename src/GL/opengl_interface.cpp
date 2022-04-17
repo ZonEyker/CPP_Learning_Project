@@ -1,5 +1,5 @@
 #include "opengl_interface.hpp"
-
+bool ispaused = false;
 namespace GL {
 
 void handle_error(const std::string& prefix, const GLenum err)
@@ -73,11 +73,15 @@ void display(void)
 
 void timer(const int step)
 {
-    for (auto& item : move_queue)
+    if (!ispaused)
     {
-        item->move();
+        for (auto& item : move_queue)
+        {
+            item->move();
+        }
     }
     glutPostRedisplay();
+
     glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
 }
 
@@ -111,6 +115,25 @@ void loop()
 void exit_loop()
 {
     glutLeaveMainLoop();
+}
+
+void increase_ticks_per_seconds()
+{
+
+    ticks_per_sec += 1;
+}
+
+void reduce_ticks_per_seconds()
+{
+    if (ticks_per_sec > 1)
+    {
+        ticks_per_sec -= 1;
+    }
+}
+
+void pause()
+{
+    ispaused = !ispaused;
 }
 
 } // namespace GL

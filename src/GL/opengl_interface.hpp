@@ -33,5 +33,8 @@ void change_zoom(const float factor);
 void init_gl(int argc, char** argv, const char* title);
 void loop();
 void exit_loop();
+void increase_ticks_per_seconds();
+void reduce_ticks_per_seconds();
+void pause();
 
 } // namespace GL
