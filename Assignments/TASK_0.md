@@ -7,24 +7,24 @@ Compilez et lancez le programme.
 Allez dans le fichier `tower_sim.cpp` et recherchez la fonction responsable de gérer les inputs du programme.
 Sur quelle touche faut-il appuyer pour ajouter un avion ?
 
--La touche c
+- La touche c
 
 Comment faire pour quitter le programme ?
 
--Appuyer sur le touche x ou q 
+- Appuyer sur le touche x ou q 
 
 A quoi sert la touche 'F' ?
 
--A passer en mode plein ecran ou non.
+- A passer en mode plein ecran ou non.
 
 Ajoutez un avion à la simulation et attendez.
 Que est le comportement de l'avion ?
 
--L'avion atterri, il se fait ravitailler en essence et redécolle.
+- L'avion atterri, il se fait ravitailler en essence et redécolle.
 
 Quelles informations s'affichent dans la console ?
 
--Les actions que l'avion fait
+- Les actions que l'avion fait
 
 Ajoutez maintenant quatre avions d'un coup dans la simulation.
 Que fait chacun des avions ?
@@ -36,36 +36,103 @@ Trois avions peuvent atterir. Le dernier avion attend en l'air qu'une place se l
 Listez les classes du programme à la racine du dossier src/.
 Pour chacune d'entre elle, expliquez ce qu'elle représente et son rôle dans le programme.
 
--aircraft_types : definit les 3 différents types d'avions
--aircraft : représente un avion
--airport_type : definit les différents types d'aeroports
--airport : représente un aeroport
--config : configuration des paramètres de la simulation
--geometry : represente des points 2D ou 3D
--runway : représente une piste d'atterissage/décollage
--terminal : représente un terminal d'un aéroport
--tower_sim: simule un aéroport
--tower : Gère les flux d'un aéroport
--waypoint : représente un point de passage, sert à créer des trajectoires pour les avions
+- aircraft_types : definit les 3 différents types d'avions
+- aircraft : représente un avion
+- airport_type : definit les différents types d'aeroports
+- airport : représente un aeroport
+- config : configuration des paramètres de la simulation
+- geometry : represente des points 2D ou 3D
+- runway : représente une piste d'atterissage/décollage
+- terminal : représente un terminal d'un aéroport
+- tower_sim: simule un aéroport
+- tower : Gère les flux d'un aéroport
+- waypoint : représente un point de passage, sert à créer des trajectoires pour les avions
 
 
 Pour les classes `Tower`, `Aircaft`, `Airport` et `Terminal`, listez leurs fonctions-membre publiques et expliquez précisément à quoi elles servent.
 Réalisez ensuite un schéma présentant comment ces différentes classes intéragissent ensemble.
 
 
----> TODO
+- Tower 
 
+    WaypointQueue get_instructions(Aircraft& aircraft) :
+
+        Donne les prochains points de passage.
+
+    void arrived_at_terminal(const Aircraft& aircraft) :
+
+        Averti qu'un avion atterit jusqu'au terminal.
+
+
+- Aircraft
+
+    const std::string& get_flight_num() const
+
+        Donne le numéro de vol de l'avion.
+
+    float distance_to(const Point3D& p) const
+
+        Calcule la distance entre le point et l'avion.
+
+    void display() const
+
+        Affiche l'avion.
+
+    void Aircraft::move()
+
+        Déplace l'avion en suivant les points de passage.
+
+- Airport
+
+    Tower& get_tower()
+
+        Donne la tour de controle associé à l'aéroport.
+
+    void display() const
+
+        Affiche l'aéroport.
+
+    void move()
+
+        Simule le déplacement de l'aéroport .
+
+
+- Terminal
+
+    bool in_use() const
+
+        Dit si le terminal est utilisé par un avion.
+
+    bool is_servicing() const
+
+        Dit si un avion est en cours de ravitaillement.
+
+    void assign_craft(const Aircraft& aircraft)
+
+        Donne à un terminal, à avion associé.
+
+    void start_service(const Aircraft& aircraft) 
+    
+        Commence le ravitaillement d'un avion .
+
+    void finish_service()
+
+        Termine le ravitaillement d'un avion.
+
+    void move()
+
+        Simule le "déplacement" d'un terminal, permet de faire "avancer" le ravitaillement.
 
 Quelles classes et fonctions sont impliquées dans la génération du chemin d'un avion ?
 
--Une succession de Waypoint
+- Une succession de Waypoint
 
 Quel conteneur de la librairie standard a été choisi pour représenter le chemin ?
 
--Une deque
+- Une deque
 
 Expliquez les intérêts de ce choix.
--On doit garder l'ordre des waypoints
+- On doit garder l'ordre des waypoints
 
 ## C- Bidouillons !
 
@@ -73,7 +140,7 @@ Expliquez les intérêts de ce choix.
 Le Concorde est censé pouvoir voler plus vite que les autres avions.
 Modifiez le programme pour tenir compte de cela.
 
--Dans aircraft_types.hpp
+- Dans aircraft_types.hpp
 
 2) Identifiez quelle variable contrôle le framerate de la simulation.
 Ajoutez deux nouveaux inputs au programme permettant d'augmenter ou de diminuer cette valeur.
@@ -87,26 +154,26 @@ Ajoutez une nouvelle fonctionnalité au programme pour mettre le programme en pa
 
 3) Identifiez quelle variable contrôle le temps de débarquement des avions et doublez-le.
 
--SERVICE_CYCLES
+- SERVICE_CYCLES
 
 4) Lorsqu'un avion a décollé, il réattérit peu de temps après.
 Faites en sorte qu'à la place, il soit retiré du programme.\
 Indices :\
 A quel endroit pouvez-vous savoir que l'avion doit être supprimé ?\
 
--L'avion doit etre supprimé après avoir été ravitaillé, dans la fonction get_instruction() de la classe tower
+- L'avion doit etre supprimé après avoir été ravitaillé, dans la fonction get_instruction() de la classe tower
 
 Pourquoi n'est-il pas sûr de procéder au retrait de l'avion dans cette fonction ?
 
--L'objet avion n'est pas référencé uniquement dans cette fonction, les itérateurs le contenant ne vont plus être valide  
+- L'objet avion n'est pas référencé uniquement dans cette fonction, les itérateurs le contenant ne vont plus être valide  
 
 A quel endroit de la callstack pourriez-vous le faire à la place ?\
 
--dans la fonction move() qui elle renvoie un bool pour timer() 
+- Dans la fonction move() qui elle renvoie un bool pour timer() 
 
 Que devez-vous modifier pour transmettre l'information de la première à la seconde fonction ?
 
--Un champ take_off + la fonction move retourne un bool
+- Un champ refuel + la fonction move retourne un bool
 
 
 5) Lorsqu'un objet de type `Displayable` est créé, il faut ajouter celui-ci manuellement dans la liste des objets à afficher.
@@ -125,12 +192,12 @@ Modifiez le code afin d'utiliser un conteneur STL plus adapté. Normalement, à 
 
 1) Comment a-t-on fait pour que seule la classe `Tower` puisse réserver un terminal de l'aéroport ?
 
--La classe Tower est désigné comme friend dans la classe Airport, elle a donc acces aux méthodes privées de Airport
+- La classe Tower est désigné comme friend dans la classe Airport, elle a donc acces aux méthodes privées de Airport
 
 2) En regardant le contenu de la fonction `void Aircraft::turn(Point3D direction)`, pourquoi selon-vous ne sommes-nous pas passer par une réference ?
 Pensez-vous qu'il soit possible d'éviter la copie du `Point3D` passé en paramètre ?
 
--On modifie le point avec la fonction cap_length, on est donc obligé de passer par une copie.
+- On modifie le point avec la fonction cap_length, on est donc obligé de passer par une copie.
 
 ## E- Bonus
 
